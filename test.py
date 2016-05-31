@@ -6,7 +6,7 @@ size = width, height = 620, 440
 black = 0, 0, 0
 
 screen = pygame.display.set_mode(size)
-spaceship = pygame.transform.scale(pygame.image.load("spaceship.png"), (100, 100))
+car = pygame.transform.scale(pygame.image.load("car.png"), (100, 100))
 moon = pygame.transform.scale(pygame.image.load("Moon.png"), (200, 200))
 pygame.key.set_repeat(50, 50)
 ######### MOON CONFIG #######################
@@ -43,7 +43,7 @@ while 1:
 	 	
 	screen.fill(black)
 	screen.blit(moon, (x_m, y_m))
-	screen.blit(spaceship, (x, y))
+	screen.blit(car, car.speed(x, y))
 	pygame.display.flip()
 	pygame.event.pump()
  
@@ -53,6 +53,6 @@ class spaceship():
 		return 0
 	
 	
-	def speed(Force):
+	def speed():
 		return [x, y]
 
