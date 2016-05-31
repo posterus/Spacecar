@@ -9,7 +9,7 @@ screen = pygame.display.set_mode(size)
 car = pygame.transform.scale(pygame.image.load("car.png"), (100, 100))
 #car = pygame.image.load('car.png')
 moon = pygame.transform.scale(pygame.image.load("Moon.png"), (200, 200))
-pygame.key.set_repeat(50, 50)
+pygame.key.set_repeat(60, 50)
 ######### MOON CONFIG #######################
 x_m=400
 y_m=400
