@@ -1,0 +1,6 @@
+import pygame, math
+
+def main():
+
+    pygame.init()
+    
