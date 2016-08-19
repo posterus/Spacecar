@@ -3,7 +3,13 @@ from random import randint
 from pygame.locals import *
 pygame.init()
 
-#game numbers
+from interface import *
+
+pygame.key.set_repeat(30, 1)
+clock = pygame.time.Clock()
+
+
+#game numbers    ENGINE
 score = 0
 life = 3
 speed = 4
@@ -12,49 +18,7 @@ places = ["Clock Town", "Termina Field", "Snow Head", "Ikana Valley",
              "Southern Swamp", "Great Bay"]
 start = False
 
-#screen and display
-color = 0, 0, 0
-yellow = (255,255,0)
-red = (220,0,0)
-black = (0,0,0)
-white = (255,255,255)
-blue = (0,0,205)
-cyan = (32,178,170)
-size = width, height = 1000,600
-screen = pygame.display.set_mode(size)
-
-#texts
-myfont = pygame.font.SysFont("monospace", 30, bold=True)
-myfont2 = pygame.font.SysFont("monospace", 80)
-
-#map and background
-karta = [0,0]
-link_place = "Clock Town"
-clock_town = pygame.image.load("clock_town.jpg").convert()
-termina_field = pygame.image.load("termina_field.jpg").convert()
-snow_head = pygame.image.load("snow_head.jpg").convert()
-ikana_valley = pygame.image.load("ikana_valley.jpg").convert()
-southern_swamp = pygame.image.load("southern_swamp.jpg").convert()
-great_bay = pygame.image.load("great_bay.jpg").convert()
-
-place_font = pygame.font.SysFont("monospace", 50)
-
-#moon config
-moon = pygame.transform.scale(pygame.image.load("moon.png"), (100,100))
-moonrect = moon.get_rect()
-moonrect.center = 600,50
-
-background = clock_town
-
-#music and sound
-music = pygame.mixer.music.load("zelda_main_theme.mp3")
-pygame.mixer.music.play(-1,0)
-rupee_sound = pygame.mixer.Sound("rupee_sound.wav")
-link_hurt = pygame.mixer.Sound("link_hurt.wav")
-link_dead = pygame.mixer.Sound("link_dead.wav")
-song_of_time = pygame.mixer.Sound("song_of_time.wav")
-
-#link config
+#link config     
 link_x = 500
 link_y = 500
 
@@ -69,14 +33,7 @@ linkrect = link.get_rect()
 
 linkrect.center = link_x, link_y
 
-#minilink config
-minilink = (pygame.transform.scale(pygame.image.load("link_down.gif"), (20, 20)))
-minilinkrect = minilink.get_rect()
-minilinkrect_x = 905
-minilinkrect_y = 465
-minilinkrect.center = minilinkrect_x,minilinkrect_y
-
-#triforce config
+#triforce config     ENGINE
 tri_x = 500
 tri_y = 130
 
@@ -85,11 +42,11 @@ triforcerect = triforce.get_rect()
 
 triforcerect.center = (tri_x, tri_y)
 
-#mask config
+#mask config     ENGINE
 mask = pygame.transform.scale(pygame.image.load("mask.png"), (100, 100))
 maskrect = mask.get_rect()
 
-#ocarina config
+#ocarina config      ENGINE
 ocarina = pygame.transform.scale(pygame.image.load("ocarina.png"), (50, 50))
 ocarinarect = ocarina.get_rect()
 ocarina_x = 700
@@ -97,21 +54,7 @@ ocarina_y = 300
 ocarinarect.center = (ocarina_x,ocarina_y)
 oca_place = "Clock Town"
 
-#mini ocarina config
-miniocarina = pygame.transform.scale(pygame.image.load("ocarina.png"), (20, 20))
-miniocarinarect = miniocarina.get_rect()
-miniocarinarect_x = 905
-miniocarinarect_y = 465
-miniocarinarect.center = (miniocarinarect_x, miniocarinarect_y)
-
-#heart config
-heart = pygame.transform.scale(pygame.image.load("heart.png"), (30, 30))
-
-pygame.key.set_repeat(30, 1)
-clock = pygame.time.Clock()
-
 #minimap
-
 def minimap():
         minimap1 = pygame.Rect(830, 420,150,90)
         minimap2 = pygame.Rect(860, 390,90,150)
@@ -140,36 +83,11 @@ def minimap():
 
         screen.blit(miniocarina,miniocarinarect)
 
-#menu
+
+#######################
 
 
-def menu():
-        screen.fill(black)
 
-        startrect1 = pygame.Rect(400, 250, 200, 100)
-        #startrect2 = pygame.Rect(400, 250, 200, 100)
-        #startrect3 = pygame.Rect(400, 250, 200, 100)
-        pygame.draw.rect(screen, red, startrect1)
-        #pygame.draw.rect(screen, red, startrect2)
-        #pygame.draw.rect(screen, red, startrect3)
-        
-        while True:
-                for event in pygame.event.get():
-                        if event.type == pygame.KEYDOWN:
-                                if event.key == pygame.K_ESCAPE:
-                                        pygame.quit()
-                                        sys.exit()
-                                
-                        if event.type == pygame.mouse.get_pressed():
-                        ## if mouse is pressed get position of cursor ##
-                                pos = pygame.mouse.get_pos()
-                                ## check if cursor is on button ##
-                                if startrect1.collidepoint(pos):
-                                    ## exit ##
-                                        pygame.quit()
-                                        sys.exit()
-                            
-                pygame.display.flip()
 
 #Game loop
 while 1:
@@ -242,7 +160,7 @@ while 1:
                 background = termina_field
                 link_place = "Termina Field"
                 
-        #link with ocarina        
+        #link with ocarina
         if linkrect.colliderect(ocarinarect):
                 pygame.mixer.Sound.play(song_of_time)
                 time = 20 + pygame.time.get_ticks()/1000
