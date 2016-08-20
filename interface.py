@@ -54,7 +54,7 @@ minilinkrect_x = 905
 minilinkrect_y = 465
 minilinkrect.center = minilinkrect_x,minilinkrect_y
 
-#mini ocarina config     INTERFACE
+#miniocarina config     INTERFACE
 miniocarina = pygame.transform.scale(pygame.image.load("ocarina.png"), (20, 20))
 miniocarinarect = miniocarina.get_rect()
 miniocarinarect_x = 905
@@ -64,32 +64,77 @@ miniocarinarect.center = (miniocarinarect_x, miniocarinarect_y)
 #heart config    INTERFACE
 heart = pygame.transform.scale(pygame.image.load("heart.png"), (30, 30))
 
+def minimap(minilinkrect,minilink,
+            minilinkrect_x, minilinkrect_y, oca_place,
+            miniocarina, miniocarinarect):
+        
+        minimap1 = pygame.Rect(830, 420,150,90)
+        minimap2 = pygame.Rect(860, 390,90,150)
+        
+        pygame.draw.rect(screen, cyan, (830, 420,150,90))
+        pygame.draw.rect(screen, cyan, (860, 390,90,150))
+        pygame.draw.rect(screen, black, (860, 420,90,90),1)
+
+        pygame.draw.rect(screen,black, (890,450,30,30),1)
+
+        minilinkrect.center = (minilinkrect_x, minilinkrect_y)
+        screen.blit(minilink,minilinkrect)
+
+        if(oca_place == "Clock Town"):
+                miniocarinarect.center = (905, 465)
+        elif(oca_place == "Termina Field"):
+                miniocarinarect.center = (905, 435)
+        elif(oca_place == "Snow Head"):
+                miniocarinarect.center = (905, 405)
+        elif(oca_place == "Ikana Valley"):
+                miniocarinarect.center = (965, 465)
+        elif(oca_place == "Southern Swamp"):
+                miniocarinarect.center = (905, 525)
+        elif(oca_place == "Great Bay"):
+                miniocarinarect.center = (845, 465)
+
+        screen.blit(miniocarina,miniocarinarect)
 
 def menu():
-        screen.fill(black)
+        choice = 0
+        gameon = False
+        ping =  pygame.transform.scale(pygame.image.load("triforce.png"), (30,30))
+        pingrect = ping.get_rect()
 
-        startrect1 = pygame.Rect(400, 250, 200, 100)
-        #startrect2 = pygame.Rect(400, 250, 200, 100)
-        #startrect3 = pygame.Rect(400, 250, 200, 100)
-        pygame.draw.rect(screen, red, startrect1)
-        #pygame.draw.rect(screen, red, startrect2)
-        #pygame.draw.rect(screen, red, startrect3)
+        pingrect.center = (170,150)
+
+        alt1_label = myfont2.render("Start game",1,yellow)
+        alt2_label = myfont2.render("Quit",1,yellow)
         
+        screen.blit(ping,pingrect)
+            
         while True:
+                screen.fill(black)
+                screen.blit(alt1_label, (200,100))
+                screen.blit(alt2_label,(200,300))
+                screen.blit(ping,pingrect)
+                
                 for event in pygame.event.get():
+                        keys = pygame.key.get_pressed()
                         if event.type == pygame.KEYDOWN:
+                                
                                 if event.key == pygame.K_ESCAPE:
                                         pygame.quit()
                                         sys.exit()
-                                
-                        if event.type == pygame.mouse.get_pressed():
-                        ## if mouse is pressed get position of cursor ##
-                                pos = pygame.mouse.get_pos()
-                                ## check if cursor is on button ##
-                                if startrect1.collidepoint(pos):
-                                    ## exit ##
-                                        pygame.quit()
-                                        sys.exit()
-                            
-                pygame.display.flip()
+                                elif keys[pygame.K_DOWN]:
+                                        pingrect.center = (170,350)
+                                        choice = 1
+                                elif keys[pygame.K_UP]:
+                                        choice = 0
+                                        pingrect.center = (170,150)
+                                elif event.key == pygame.K_SPACE:
+                                        if choice == 1:
+                                                pygame.quit()
+                                                sys.exit()
+                                        elif choice == 0:
+                                                gameon = True
 
+                pygame.display.flip()
+                if gameon==True:
+                        break
+                        
