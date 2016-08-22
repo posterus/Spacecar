@@ -52,6 +52,23 @@ ocarina_y = 300
 ocarinarect.center = (ocarina_x,ocarina_y)
 oca_place = "Clock Town"
 
+class Item:
+	def __init__(self, possition, image, size):
+		self.possition = possition
+		self.image = image
+		self.size = size
+
+	def Render(self):
+		self.item = pygame.image.load(self.image, self.size )
+
+	def Newpossition(self, minX, minY, maxX, maxY):
+		item_X = randint(self.minX, self.maxX)
+		item_Y = randint(self.minY, self.maxY)
+		return item_X, item_Y
+
+
+
+
 class Text:
 	def __init__(self, input_string, color, myfont, possition ):
 		self.input_string = input_string 
@@ -82,6 +99,7 @@ class Link:
 	linkrect.center = 500, 500
 	
 
+	
 
 
 
@@ -155,7 +173,6 @@ class TriCollector:
                 screen.blit(esc_label,(435,320))
                 score_label = myfont.render("Score:" + str(score), 1, yellow)
                 screen.blit(score_label, (820, 30))
-                
 
 TC = TriCollector()
 link = Link()
@@ -183,7 +200,7 @@ while 1:
                                 link.linkrect.top -= link.speed
                         if keys[pygame.K_DOWN]:
                                 link.linkrect.top += link.speed
-
+#	TC.gameloop()
 	background, link_place, minilinkrect_x, minilinkrect_y, karta = TC.possition_update(karta, link.linkrect,minilinkrect_x, minilinkrect_y)	
 
         #link with ocarina
