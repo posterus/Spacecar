@@ -11,8 +11,8 @@ clock = pygame.time.Clock()
 
 #game numbers    ENGINE
 score = 0
-life = 3
-speed = 4
+#life = 3
+#speed = 4
 time = 20
 places = ["Clock Town", "Termina Field", "Snow Head", "Ikana Valley",
              "Southern Swamp", "Great Bay"]
@@ -20,16 +20,16 @@ start = False
 
 #link config     ENGINE
 
-scream = True
-link_win = pygame.transform.scale(pygame.image.load("link_win.gif"), (200,300))
-link_up = pygame.transform.scale(pygame.image.load("link_up.gif"), (100, 100))
-link_down = pygame.transform.scale(pygame.image.load("link_down.gif"), (100, 100))
-link_left = pygame.transform.scale(pygame.image.load("link_up.gif"), (100, 100))
-
-link = link_down
-linkrect = link.get_rect()
-
-linkrect.center = 500, 500
+#scream = True
+#link_win = pygame.transform.scale(pygame.image.load("link_win.gif"), (200,300))
+#link_up = pygame.transform.scale(pygame.image.load("link_up.gif"), (100, 100))
+#link_down = pygame.transform.scale(pygame.image.load("link_down.gif"), (100, 100))
+#link_left = pygame.transform.scale(pygame.image.load("link_up.gif"), (100, 100))
+#
+#link = link_down
+#linkrect = link.get_rect()
+#
+#linkrect.center = 500, 500
 
 #triforce config     ENGINE
 tri_x = 500
@@ -52,6 +52,113 @@ ocarina_y = 300
 ocarinarect.center = (ocarina_x,ocarina_y)
 oca_place = "Clock Town"
 
+class Text:
+	def __init__(self, input_string, color, myfont, possition ):
+		self.input_string = input_string 
+		self.color  = color
+		self.myfont = myfont
+		self.text = 0
+		self.possition = possition
+
+
+	def Render(self):
+		self.text = self.myfont.render(self.input_string, 1, self.color)
+	
+	def blit(self): 
+                screen.blit(self.text, self.possition)
+
+class Link:
+	life = 3
+	speed = 4	
+	scream = True
+	link_win = pygame.transform.scale(pygame.image.load("link_win.gif"), (200,300))
+	link_up = pygame.transform.scale(pygame.image.load("link_up.gif"), (100, 100))
+	link_down = pygame.transform.scale(pygame.image.load("link_down.gif"), (100, 100))
+	link_left = pygame.transform.scale(pygame.image.load("link_up.gif"), (100, 100))
+	
+	link = link_down
+	linkrect = link.get_rect()
+	
+	linkrect.center = 500, 500
+	
+
+
+
+
+
+class TriCollector:
+	def possition_update(self, karta, linkrect,minilinkrect_x, minilinkrect_y):	
+		#link with edge
+		if ((3 in (map(abs, karta)) or (sum(map(abs, karta))==4))):
+			linkrect.center = [width/2,height/2]
+			karta = [0,0]
+			minilinkrect_x = 905
+			minilinkrect_y = 465
+		#move left
+		elif(linkrect.right<=0):
+			linkrect.right = width+50
+			karta[0] -= 1
+			minilinkrect_x -= 30
+		#move right
+		elif(linkrect.left>=1000):
+			linkrect.left = -50
+			karta[0] += 1
+			minilinkrect_x += 30
+		#move up
+		elif(linkrect.bottom<=0):
+			linkrect.bottom = height+50
+			karta[1] += 1
+			minilinkrect_y -= 30
+		#move down
+		elif(linkrect.top>=600):
+			linkrect.top = -50
+			karta[1] -= 1
+			minilinkrect_y += 30
+			
+		#place on map
+
+		if ((3 in (map(abs, karta)) or (sum(map(abs, karta))==4))):
+			background = clock_town
+			link_place = "Clock Town"
+		elif karta == [0,0]:
+			background = clock_town
+			link_place = "Clock Town"
+		elif(karta[1] == 2):
+			background = snow_head
+			link_place = "Snow Head"
+		elif(karta[0] == 2):
+			background = ikana_valley
+			link_place = "Ikana Valley"
+		elif(karta[1] == -2):
+			background = southern_swamp
+			link_place = "Southern Swamp"
+		elif(karta[0] == -2):
+			background = great_bay
+			link_place = "Great Bay"
+		elif ((1 in karta) or (-1 in karta)):
+			background = termina_field
+			link_place = "Termina Field"
+		return(background, link_place, minilinkrect_x, minilinkrect_y, karta)
+	def gameover(self):
+		screen.fill(black)
+                moon = pygame.transform.scale(pygame.image.load("moon.png"), (1000,1000))
+                moonrect = moon.get_rect()
+                moonrect.center = width/2,height/2
+                screen.blit(moon,moonrect)
+
+                if link.scream == True:
+                        pygame.mixer.Sound.play(link_dead)
+                        link.scream = False
+                gameover_label = myfont2.render("GAME OVER",1, red)
+                esc_label = myfont.render("Press ESC",1, red)
+                screen.blit(gameover_label,(300,220))
+                screen.blit(esc_label,(435,320))
+                score_label = myfont.render("Score:" + str(score), 1, yellow)
+                screen.blit(score_label, (820, 30))
+                
+
+TC = TriCollector()
+link = Link()
 
 menu()
 
@@ -69,68 +176,18 @@ while 1:
                                 sys.exit()
                         #link movement
                         if keys[pygame.K_LEFT]:
-                                linkrect.left -= speed
+                                link.linkrect.left -= link.speed
                         if keys[pygame.K_RIGHT]:
-                                linkrect.left += speed
+                                link.linkrect.left += link.speed
                         if keys[pygame.K_UP]:
-                                linkrect.top -= speed
+                                link.linkrect.top -= link.speed
                         if keys[pygame.K_DOWN]:
-                                linkrect.top += speed
+                                link.linkrect.top += link.speed
 
+	background, link_place, minilinkrect_x, minilinkrect_y, karta = TC.possition_update(karta, link.linkrect,minilinkrect_x, minilinkrect_y)	
 
-        #link with edge
-        if ((3 in (map(abs, karta)) or (sum(map(abs, karta))==4))):
-                linkrect.center = [width/2,height/2]
-                karta = [0,0]
-                minilinkrect_x = 905
-                minilinkrect_y = 465
-        #move left
-        elif(linkrect.right<=0):
-                linkrect.right = width+50
-                karta[0] -= 1
-                minilinkrect_x -= 30
-        #move right
-        elif(linkrect.left>=1000):
-                linkrect.left = -50
-                karta[0] += 1
-                minilinkrect_x += 30
-        #move up
-        elif(linkrect.bottom<=0):
-                linkrect.bottom = height+50
-                karta[1] += 1
-                minilinkrect_y -= 30
-        #move down
-        elif(linkrect.top>=600):
-                linkrect.top = -50
-                karta[1] -= 1
-                minilinkrect_y += 30
-                
-        #place on map
-
-        if ((3 in (map(abs, karta)) or (sum(map(abs, karta))==4))):
-                background = clock_town
-                link_place = "Clock Town"
-        elif karta == [0,0]:
-                background = clock_town
-                link_place = "Clock Town"
-        elif(karta[1] == 2):
-                background = snow_head
-                link_place = "Snow Head"
-        elif(karta[0] == 2):
-                background = ikana_valley
-                link_place = "Ikana Valley"
-        elif(karta[1] == -2):
-                background = southern_swamp
-                link_place = "Southern Swamp"
-        elif(karta[0] == -2):
-                background = great_bay
-                link_place = "Great Bay"
-        elif ((1 in karta) or (-1 in karta)):
-                background = termina_field
-                link_place = "Termina Field"
-                
         #link with ocarina
-        if linkrect.colliderect(ocarinarect):
+        if link.linkrect.colliderect(ocarinarect):
                 pygame.mixer.Sound.play(song_of_time)
                 time = 20 + pygame.time.get_ticks()/1000
                 oca_place = places[randint(0,5)]
@@ -143,10 +200,10 @@ while 1:
 
 
         #link with triforce        
-        if linkrect.colliderect(triforcerect):
+        if link.linkrect.colliderect(triforcerect):
                 pygame.mixer.Sound.play(rupee_sound)
                 score+=1
-                speed+=1
+                link.speed+=1
                 while(True):
                         mask_x = randint(0,width-50)
                         mask_y = randint(0,height-50)
@@ -156,47 +213,35 @@ while 1:
                         tri_y = randint(0,height-50)
                         triforcerect.center = (tri_x, tri_y)
                         
-                        if (not(linkrect.colliderect(maskrect))
+                        if (not(link.linkrect.colliderect(maskrect))
                         and not(maskrect.colliderect(triforcerect))
-                        and not(linkrect.colliderect(triforcerect))):
+                        and not(link.linkrect.colliderect(triforcerect))):
                                 break
                         
         #link with mask
         if score > 0:
-                if linkrect.colliderect(maskrect):
-                        life -= 1
-                        if life!=0:
+                if link.linkrect.colliderect(maskrect):
+                        link.life -= 1
+                        if link.life!=0:
                                 pygame.mixer.Sound.play(link_hurt)
                                 
                         while(True):
                                 link_x = randint(0,width-50)
                                 link_y = randint(0,height-50)
-                                linkrect.center = (link_x, link_y)
-                                if (not(linkrect.colliderect(maskrect))):
+                                link.linkrect.center = (link_x, link_y)
+                                if (not(link.linkrect.colliderect(maskrect))):
                                         break
                                                 
         time_left = time-(pygame.time.get_ticks()/1000)
         if time_left == 0:
-                life = 0
-        #death               
-        if life == 0:
-                screen.fill(black)
-                moon = pygame.transform.scale(pygame.image.load("moon.png"), (1000,1000))
-                moonrect = moon.get_rect()
-                moonrect.center = width/2,height/2
-                screen.blit(moon,moonrect)
-
-                if scream == True:
-                        pygame.mixer.Sound.play(link_dead)
-                        scream = False
-                gameover_label = myfont2.render("GAME OVER",1, red)
-                esc_label = myfont.render("Press ESC",1, red)
-                screen.blit(gameover_label,(300,220))
-                screen.blit(esc_label,(435,320))
-                score_label = myfont.render("Score:" + str(score), 1, yellow)
-                screen.blit(score_label, (820, 30))
+                link.life = 0
+        
+	
+	#death               
+        if link.life == 0:
+		TC.gameover()
         #live
-        if life>0:
+        if link.life>0:
                 screen.blit(background,[0,0])
 
                 if time < 10:
@@ -211,26 +256,33 @@ while 1:
                 
                 screen.blit(ocarina,ocarinarect)
 
-                screen.blit(link, linkrect)
+                screen.blit(link.link, link.linkrect)
                 screen.blit(triforce, triforcerect)
-                if life >= 3:
+                if link.life >= 3:
                         screen.blit(heart, (140,30))
-                if life >= 2:
+                if link.life >= 2:
                         screen.blit(heart, (90,30))
-                if life >= 1:
+                if link.life >= 1:
                         screen.blit(heart, (40,30))
                 if score>0:
                         screen.blit(mask, maskrect)
+       		         
+		# Updating Score,  time and link/ocarina possition	
+		score_label = Text("Score" + str(score), yellow, myfont, (820, 30)) 
+		place_label = Text(link_place + "" + str(karta), white, myfont, (580,560))
+		time_label = Text("Moon crash in: "+str(time_left), red, myfont,(200, 30))
+		oca_label = Text("Ocarina: "+oca_place, blue, myfont,(30, 560))
+				
+		score_label.Render()
+		place_label.Render()
+		time_label.Render()
+		oca_label.Render()
+
                 
-                score_label = myfont.render("Score:" + str(score), 1, yellow)
-                place_label = myfont.render(link_place + " " + str(karta), 1, white)
-                time_label = myfont.render("Moon crash in: "+str(time_left),1, red)
-                oca_label = myfont.render("Ocarina: " + oca_place, 1, blue)
-                
-                screen.blit(score_label, (820, 30))
-                screen.blit(place_label, (580,560))
-                screen.blit(time_label, (200,30))
-                screen.blit(oca_label, (30, 560))
+		score_label.blit()
+		place_label.blit()
+		time_label.blit()
+		oca_label.blit()
 
 
         #50 triforce
