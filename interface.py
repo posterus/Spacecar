@@ -21,7 +21,7 @@ myfont = pygame.font.SysFont("monospace", 30, bold=True)
 myfont2 = pygame.font.SysFont("monospace", 80)
 
 #map and background       INTERFACE
-karta = [0,0]
+#karta = [0,0]
 link_place = "Clock Town"
 clock_town = pygame.image.load("clock_town.jpg").convert()
 termina_field = pygame.image.load("termina_field.jpg").convert()
