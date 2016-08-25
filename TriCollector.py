@@ -88,6 +88,7 @@ class Link:
 	life = 3
 	speed = 4	
 	scream = True
+	link_place = 'Clock Town'
 	link_win = pygame.transform.scale(pygame.image.load("link_win.gif"), (200,300))
 	link_up = pygame.transform.scale(pygame.image.load("link_up.gif"), (100, 100))
 	link_down = pygame.transform.scale(pygame.image.load("link_down.gif"), (100, 100))
@@ -98,13 +99,27 @@ class Link:
 	
 	linkrect.center = 500, 500
 	
+class Media:
+	def __init__(self, track_url, track_type):
+		self.track_type = track_type 
+		self.track_url = track_url
+		if(self.track_type == 'background'):
+			self.track = pygame.mixer.music.load(self.track_url)
+  			pygame.mixer.music.play(-1,0)
+		if(self.track_type == 'effect'):
+			self.track = pygame.mixer.Sound(self.track_url)
 
+  	#rupee_sound = pygame.mixer.Sound("rupee_sound.wav")
+  	#link_hurt = pygame.mixer.Sound("link_hurt.wav")
+  	#link_dead = pygame.mixer.Sound("link_dead.wav")
+  	#song_of_time = pygame.mixer.Sound("song_of_time.wav")
+ 	def play(self):
+		pygame.mixer.Sound.play(self.track)
+		 
 	
 
-
-
-
 class TriCollector:
+	karta = [0, 0]
 	def possition_update(self, karta, linkrect,minilinkrect_x, minilinkrect_y):	
 		#link with edge
 		if ((3 in (map(abs, karta)) or (sum(map(abs, karta))==4))):
@@ -165,7 +180,7 @@ class TriCollector:
                 screen.blit(moon,moonrect)
 
                 if link.scream == True:
-                        pygame.mixer.Sound.play(link_dead)
+                        link_dead.play()
                         link.scream = False
                 gameover_label = myfont2.render("GAME OVER",1, red)
                 esc_label = myfont.render("Press ESC",1, red)
@@ -176,6 +191,19 @@ class TriCollector:
 
 TC = TriCollector()
 link = Link()
+
+
+
+# music = Media('zelda_main_theme.mp3', 'background') #TO HELL WITH THIS SONG
+song_of_times = Media('song_of_time.wav', 'effect')
+link_dead = Media('link_dead.wav', 'effect')
+link_hurt = Media('link_hurt.wav', 'effect')
+rupee_sound = Media('rupee_sound.wav', 'effect')
+
+
+
+
+
 
 menu()
 
@@ -201,11 +229,12 @@ while 1:
                         if keys[pygame.K_DOWN]:
                                 link.linkrect.top += link.speed
 #	TC.gameloop()
-	background, link_place, minilinkrect_x, minilinkrect_y, karta = TC.possition_update(karta, link.linkrect,minilinkrect_x, minilinkrect_y)	
+	background, link_place, minilinkrect_x, minilinkrect_y, TC.karta = TC.possition_update(TC.karta, link.linkrect,minilinkrect_x, minilinkrect_y)	
 
         #link with ocarina
         if link.linkrect.colliderect(ocarinarect):
-                pygame.mixer.Sound.play(song_of_time)
+		song_of_times.play()
+                #pygame.mixer.Sound.play(song_of_time)
                 time = 20 + pygame.time.get_ticks()/1000
                 oca_place = places[randint(0,5)]
                 ocarina_x = randint(50,width-50)
@@ -218,7 +247,7 @@ while 1:
 
         #link with triforce        
         if link.linkrect.colliderect(triforcerect):
-                pygame.mixer.Sound.play(rupee_sound)
+               	rupee_sound.play() 
                 score+=1
                 link.speed+=1
                 while(True):
@@ -240,7 +269,7 @@ while 1:
                 if link.linkrect.colliderect(maskrect):
                         link.life -= 1
                         if link.life!=0:
-                                pygame.mixer.Sound.play(link_hurt)
+                                link_hurt.play()
                                 
                         while(True):
                                 link_x = randint(0,width-50)
@@ -286,7 +315,7 @@ while 1:
        		         
 		# Updating Score,  time and link/ocarina possition	
 		score_label = Text("Score" + str(score), yellow, myfont, (820, 30)) 
-		place_label = Text(link_place + "" + str(karta), white, myfont, (580,560))
+		place_label = Text(link.link_place + "" + str(TC.karta), white, myfont, (580,560))
 		time_label = Text("Moon crash in: "+str(time_left), red, myfont,(200, 30))
 		oca_label = Text("Ocarina: "+oca_place, blue, myfont,(30, 560))
 				

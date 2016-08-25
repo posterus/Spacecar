@@ -22,7 +22,7 @@ myfont2 = pygame.font.SysFont("monospace", 80)
 
 #map and background       INTERFACE
 #karta = [0,0]
-link_place = "Clock Town"
+#link_place = "Clock Town"
 clock_town = pygame.image.load("clock_town.jpg").convert()
 termina_field = pygame.image.load("termina_field.jpg").convert()
 snow_head = pygame.image.load("snow_head.jpg").convert()
@@ -33,13 +33,17 @@ great_bay = pygame.image.load("great_bay.jpg").convert()
 place_font = pygame.font.SysFont("monospace", 50)
 
 #music and sound   INTERFACE
-music = pygame.mixer.music.load("zelda_main_theme.mp3")
-pygame.mixer.music.play(-1,0)
-rupee_sound = pygame.mixer.Sound("rupee_sound.wav")
-link_hurt = pygame.mixer.Sound("link_hurt.wav")
-link_dead = pygame.mixer.Sound("link_dead.wav")
-song_of_time = pygame.mixer.Sound("song_of_time.wav")
+#music = pygame.mixer.music.load("zelda_main_theme.mp3")
+#
+#pygame.mixer.music.play(-1,0)
+#
+#
+#rupee_sound = pygame.mixer.Sound("rupee_sound.wav")
+#link_hurt = pygame.mixer.Sound("link_hurt.wav")
+#link_dead = pygame.mixer.Sound("link_dead.wav")
+#song_of_time = pygame.mixer.Sound("song_of_time.wav")
 
+#pygame.mixer.music.play(-1,0)
 #moon config    INTERFACE
 moon = pygame.transform.scale(pygame.image.load("moon.png"), (100,100))
 moonrect = moon.get_rect()
