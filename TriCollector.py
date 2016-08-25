@@ -116,9 +116,89 @@ class Media:
  	def play(self):
 		pygame.mixer.Sound.play(self.track)
 		 
-	
 
 class TriCollector:
+	yellow = (255,255,0)
+ 	red = (220,0,0)
+  	black = (0,0,0)
+  	white = (255,255,255)
+   	blue = (0,0,205)
+   	cyan = (32,178,170)
+   	size = width, height = 1000,600
+  
+   	screen = pygame.display.set_mode(size)
+  
+   	#texts     INTERFACE
+   	myfont = pygame.font.SysFont("monospace", 30, bold=True)
+  	myfont2 = pygame.font.SysFont("monospace", 80)	
+	
+	clock_town = pygame.image.load("clock_town.jpg").convert()
+	termina_field = pygame.image.load("termina_field.jpg").convert()
+  	snow_head = pygame.image.load("snow_head.jpg").convert()
+  	ikana_valley = pygame.image.load("ikana_valley.jpg").convert()
+  	southern_swamp = pygame.image.load("southern_swamp.jpg").convert()
+ 	great_bay = pygame.image.load("great_bay.jpg").convert()
+ 
+ 	place_font = pygame.font.SysFont("monospace", 50)
+	#moon config    INTERFACE
+  	moon = pygame.transform.scale(pygame.image.load("moon.png"), (100,100))
+   	moonrect = moon.get_rect()
+   	moonrect.center = 600,50
+  
+   	background = clock_town
+  
+	 
+	#minilink config        INTERFACE
+	minilink = (pygame.transform.scale(pygame.image.load("link_down.gif"), (20, 20)))
+	minilinkrect = minilink.get_rect()
+	minilinkrect_x = 905
+	minilinkrect_y = 465
+	minilinkrect.center = minilinkrect_x,minilinkrect_y
+	
+	#miniocarina config     INTERFACE
+	miniocarina = pygame.transform.scale(pygame.image.load("ocarina.png"), (20, 20))
+	miniocarinarect = miniocarina.get_rect()
+	miniocarinarect_x = 905
+	miniocarinarect_y = 465
+	miniocarinarect.center = (miniocarinarect_x, miniocarinarect_y)
+	
+	#heart config    INTERFACE
+	heart = pygame.transform.scale(pygame.image.load("heart.png"), (30, 30))
+	
+	def minimap(self, minilinkrect,minilink,
+	            minilinkrect_x, minilinkrect_y, oca_place,
+	            miniocarina, miniocarinarect):
+	
+	        minimap1 = pygame.Rect(830, 420,150,90)
+	        minimap2 = pygame.Rect(860, 390,90,150)
+	
+	        pygame.draw.rect(self.screen, self.cyan, (830, 420,150,90))
+	        pygame.draw.rect(self.screen, self.cyan, (860, 390,90,150))
+	        pygame.draw.rect(self.screen, self.black, (860, 420,90,90),1)
+	
+	        pygame.draw.rect(self.screen, self.black, (890,450,30,30),1)
+	
+	        minilinkrect.center = (minilinkrect_x, minilinkrect_y)
+	        self.screen.blit(minilink,minilinkrect)
+	
+	        if(oca_place == "Clock Town"):
+	                miniocarinarect.center = (905, 465)
+	        elif(oca_place == "Termina Field"):
+	                miniocarinarect.center = (905, 435)
+	        elif(oca_place == "Snow Head"):
+	                miniocarinarect.center = (905, 405)
+	        elif(oca_place == "Ikana Valley"):
+	                miniocarinarect.center = (965, 465)
+	        elif(oca_place == "Southern Swamp"):
+	                miniocarinarect.center = (905, 525)
+	        elif(oca_place == "Great Bay"):
+	                miniocarinarect.center = (845, 465)
+	
+	        self.screen.blit(miniocarina,miniocarinarect)
+
+	#########################
+	#### POSSITION STUFF ####
+	#########################
 	karta = [0, 0]
 	def possition_update(self, karta, linkrect,minilinkrect_x, minilinkrect_y):	
 		#link with edge
@@ -151,27 +231,28 @@ class TriCollector:
 		#place on map
 
 		if ((3 in (map(abs, karta)) or (sum(map(abs, karta))==4))):
-			background = clock_town
+			background = TC.clock_town
 			link_place = "Clock Town"
 		elif karta == [0,0]:
-			background = clock_town
+			background = TC.clock_town
 			link_place = "Clock Town"
 		elif(karta[1] == 2):
-			background = snow_head
+			background = TC.snow_head
 			link_place = "Snow Head"
 		elif(karta[0] == 2):
-			background = ikana_valley
+			background = TC.ikana_valley
 			link_place = "Ikana Valley"
 		elif(karta[1] == -2):
-			background = southern_swamp
+			background = TC.southern_swamp
 			link_place = "Southern Swamp"
 		elif(karta[0] == -2):
-			background = great_bay
+			background = TC.great_bay
 			link_place = "Great Bay"
 		elif ((1 in karta) or (-1 in karta)):
-			background = termina_field
+			background = TC.termina_field
 			link_place = "Termina Field"
 		return(background, link_place, minilinkrect_x, minilinkrect_y, karta)
+
 	def gameover(self):
 		screen.fill(black)
                 moon = pygame.transform.scale(pygame.image.load("moon.png"), (1000,1000))
@@ -188,6 +269,48 @@ class TriCollector:
                 screen.blit(esc_label,(435,320))
                 score_label = myfont.render("Score:" + str(score), 1, yellow)
                 screen.blit(score_label, (820, 30))
+def menu():
+        choice = 0
+        gameon = False
+        ping =  pygame.transform.scale(pygame.image.load("triforce.png"), (30,30))
+        pingrect = ping.get_rect()
+
+        pingrect.center = (170,150)
+
+        alt1_label = TC.myfont2.render("Start game",1,TC.yellow)
+        alt2_label = TC.myfont2.render("Quit",1, TC.yellow)
+
+        TC.screen.blit(ping,pingrect)
+
+        while True:
+                TC.screen.fill(TC.black)
+                TC.screen.blit(alt1_label, (200,100))
+                TC.screen.blit(alt2_label,(200,300))
+                TC.screen.blit(ping,pingrect)
+
+                for event in pygame.event.get():
+                        keys = pygame.key.get_pressed()
+                        if event.type == pygame.KEYDOWN:
+
+                                if event.key == pygame.K_ESCAPE:
+                                        pygame.quit()
+                                        sys.exit()
+                                elif keys[pygame.K_DOWN]:
+                                        pingrect.center = (170,350)
+                                        choice = 1
+                                elif keys[pygame.K_UP]:
+                                        choice = 0
+                                        pingrect.center = (170,150)
+                                elif event.key == pygame.K_SPACE:
+                                        if choice == 1:
+                                                pygame.quit()
+                                                sys.exit()
+                                        elif choice == 0:
+                                                gameon = True
+
+                pygame.display.flip()
+                if gameon==True:
+                        break
 
 TC = TriCollector()
 link = Link()
@@ -229,7 +352,7 @@ while 1:
                         if keys[pygame.K_DOWN]:
                                 link.linkrect.top += link.speed
 #	TC.gameloop()
-	background, link_place, minilinkrect_x, minilinkrect_y, TC.karta = TC.possition_update(TC.karta, link.linkrect,minilinkrect_x, minilinkrect_y)	
+	background, link_place, minilinkrect_x, minilinkrect_y, TC.karta = TC.possition_update(TC.karta, link.linkrect,TC.minilinkrect_x, TC.minilinkrect_y)	
 
         #link with ocarina
         if link.linkrect.colliderect(ocarinarect):
@@ -288,36 +411,36 @@ while 1:
 		TC.gameover()
         #live
         if link.life>0:
-                screen.blit(background,[0,0])
+                TC.screen.blit(background,[0,0])
 
                 if time < 10:
                         moon = pygame.transform.scale(pygame.image.load("moon.png"), (200,100))
                         moonrect = moon.get_rect()
                         
-                screen.blit(moon, moonrect)
+                TC.screen.blit(TC.moon, TC.moonrect)
 
-                minimap(minilinkrect, minilink,
+                TC.minimap(minilinkrect, minilink,
                         minilinkrect_x, minilinkrect_y, oca_place,
                         miniocarina, miniocarinarect)
                 
-                screen.blit(ocarina,ocarinarect)
+                TC.screen.blit(ocarina, ocarinarect)
 
-                screen.blit(link.link, link.linkrect)
-                screen.blit(triforce, triforcerect)
+                TC.screen.blit(link.link, link.linkrect)
+                TC.screen.blit(triforce, triforcerect)
                 if link.life >= 3:
-                        screen.blit(heart, (140,30))
+                        TC.screen.blit(heart, (140,30))
                 if link.life >= 2:
-                        screen.blit(heart, (90,30))
+                        TC.screen.blit(heart, (90,30))
                 if link.life >= 1:
-                        screen.blit(heart, (40,30))
+                        TC.screen.blit(heart, (40,30))
                 if score>0:
-                        screen.blit(mask, maskrect)
+                        TC.screen.blit(mask, maskrect)
        		         
 		# Updating Score,  time and link/ocarina possition	
-		score_label = Text("Score" + str(score), yellow, myfont, (820, 30)) 
-		place_label = Text(link.link_place + "" + str(TC.karta), white, myfont, (580,560))
-		time_label = Text("Moon crash in: "+str(time_left), red, myfont,(200, 30))
-		oca_label = Text("Ocarina: "+oca_place, blue, myfont,(30, 560))
+		score_label = Text("Score" + str(score), TC.yellow, TC.myfont, (820, 30)) 
+		place_label = Text(link.link_place + "" + str(TC.karta), TC.white, TC.myfont, (580,560))
+		time_label = Text("Moon crash in: "+str(time_left), TC.red, TC.myfont,(200, 30))
+		oca_label = Text("Ocarina: "+oca_place, TC.blue, TC.myfont,(30, 560))
 				
 		score_label.Render()
 		place_label.Render()
