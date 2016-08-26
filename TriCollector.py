@@ -3,11 +3,13 @@ from random import randint
 from pygame.locals import *
 pygame.init()
 
-from interface import *
+#from interface import *
 
 pygame.key.set_repeat(30, 1)
 clock = pygame.time.Clock()
 
+size = width, height = 1000,600
+screen = pygame.display.set_mode(size)
 
 #game numbers    ENGINE
 score = 0
@@ -124,9 +126,7 @@ class TriCollector:
   	white = (255,255,255)
    	blue = (0,0,205)
    	cyan = (32,178,170)
-   	size = width, height = 1000,600
   
-   	screen = pygame.display.set_mode(size)
   
    	#texts     INTERFACE
    	myfont = pygame.font.SysFont("monospace", 30, bold=True)
@@ -172,14 +172,14 @@ class TriCollector:
 	        minimap1 = pygame.Rect(830, 420,150,90)
 	        minimap2 = pygame.Rect(860, 390,90,150)
 	
-	        pygame.draw.rect(self.screen, self.cyan, (830, 420,150,90))
-	        pygame.draw.rect(self.screen, self.cyan, (860, 390,90,150))
-	        pygame.draw.rect(self.screen, self.black, (860, 420,90,90),1)
+	        pygame.draw.rect(screen, self.cyan, (830, 420,150,90))
+	        pygame.draw.rect(screen, self.cyan, (860, 390,90,150))
+	        pygame.draw.rect(screen, self.black, (860, 420,90,90),1)
 	
-	        pygame.draw.rect(self.screen, self.black, (890,450,30,30),1)
+	        pygame.draw.rect(screen, self.black, (890,450,30,30),1)
 	
 	        minilinkrect.center = (minilinkrect_x, minilinkrect_y)
-	        self.screen.blit(minilink,minilinkrect)
+	        screen.blit(minilink,minilinkrect)
 	
 	        if(oca_place == "Clock Town"):
 	                miniocarinarect.center = (905, 465)
@@ -194,7 +194,7 @@ class TriCollector:
 	        elif(oca_place == "Great Bay"):
 	                miniocarinarect.center = (845, 465)
 	
-	        self.screen.blit(miniocarina,miniocarinarect)
+	        screen.blit(miniocarina,miniocarinarect)
 
 	#########################
 	#### POSSITION STUFF ####
@@ -280,13 +280,13 @@ def menu():
         alt1_label = TC.myfont2.render("Start game",1,TC.yellow)
         alt2_label = TC.myfont2.render("Quit",1, TC.yellow)
 
-        TC.screen.blit(ping,pingrect)
+        screen.blit(ping,pingrect)
 
         while True:
-                TC.screen.fill(TC.black)
-                TC.screen.blit(alt1_label, (200,100))
-                TC.screen.blit(alt2_label,(200,300))
-                TC.screen.blit(ping,pingrect)
+                screen.fill(TC.black)
+                screen.blit(alt1_label, (200,100))
+                screen.blit(alt2_label,(200,300))
+                screen.blit(ping,pingrect)
 
                 for event in pygame.event.get():
                         keys = pygame.key.get_pressed()
@@ -311,6 +311,9 @@ def menu():
                 pygame.display.flip()
                 if gameon==True:
                         break
+
+
+
 
 TC = TriCollector()
 link = Link()
@@ -411,30 +414,30 @@ while 1:
 		TC.gameover()
         #live
         if link.life>0:
-                TC.screen.blit(background,[0,0])
+                screen.blit(background,[0,0])
 
                 if time < 10:
                         moon = pygame.transform.scale(pygame.image.load("moon.png"), (200,100))
                         moonrect = moon.get_rect()
                         
-                TC.screen.blit(TC.moon, TC.moonrect)
+                screen.blit(TC.moon, TC.moonrect)
 
-                TC.minimap(minilinkrect, minilink,
-                        minilinkrect_x, minilinkrect_y, oca_place,
-                        miniocarina, miniocarinarect)
+                TC.minimap(TC.minilinkrect, TC.minilink,
+                        TC.minilinkrect_x, TC.minilinkrect_y, oca_place,
+                        TC.miniocarina, TC.miniocarinarect)
                 
-                TC.screen.blit(ocarina, ocarinarect)
+                screen.blit(ocarina, ocarinarect)
 
-                TC.screen.blit(link.link, link.linkrect)
-                TC.screen.blit(triforce, triforcerect)
+                screen.blit(link.link, link.linkrect)
+                screen.blit(triforce, triforcerect)
                 if link.life >= 3:
-                        TC.screen.blit(heart, (140,30))
+                        screen.blit(TC.heart, (140,30))
                 if link.life >= 2:
-                        TC.screen.blit(heart, (90,30))
+                        screen.blit(TC.heart, (90,30))
                 if link.life >= 1:
-                        TC.screen.blit(heart, (40,30))
+                        screen.blit(TC.heart, (40,30))
                 if score>0:
-                        TC.screen.blit(mask, maskrect)
+                        screen.blit(mask, maskrect)
        		         
 		# Updating Score,  time and link/ocarina possition	
 		score_label = Text("Score" + str(score), TC.yellow, TC.myfont, (820, 30)) 
@@ -457,9 +460,9 @@ while 1:
         #50 triforce
         if score == 50:
                 time = 1000000
-                screen.fill(black)
+                screen.fill(TC.black)
                 screen.blit(link_win, (400,240))
-                win_label = myfont2.render("50  YOU WIN",1, yellow)
+                win_label = myfont2.render("50  YOU WIN",1, TC.yellow)
                 
                 screen.blit(win_label, (250,100))
                 screen.blit(triforce, (370,120))
