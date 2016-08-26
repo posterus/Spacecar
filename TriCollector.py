@@ -254,7 +254,7 @@ class TriCollector:
 		return(background, link_place, minilinkrect_x, minilinkrect_y, karta)
 
 	def gameover(self):
-		screen.fill(black)
+		screen.fill(TC.black)
                 moon = pygame.transform.scale(pygame.image.load("moon.png"), (1000,1000))
                 moonrect = moon.get_rect()
                 moonrect.center = width/2,height/2
@@ -263,12 +263,19 @@ class TriCollector:
                 if link.scream == True:
                         link_dead.play()
                         link.scream = False
-                gameover_label = myfont2.render("GAME OVER",1, red)
-                esc_label = myfont.render("Press ESC",1, red)
-                screen.blit(gameover_label,(300,220))
-                screen.blit(esc_label,(435,320))
-                score_label = myfont.render("Score:" + str(score), 1, yellow)
-                screen.blit(score_label, (820, 30))
+		gameover_label = Text('GAME OVER', TC.red, TC.myfont2, (300, 220))
+		gameover_label.Render()
+		gameover_label.blit()
+		
+		ecs_label = Text('Press ESC', TC.red, TC.myfont, (435, 320))
+		ecs_label.Render()
+		ecs_label.blit()
+
+		score_label = Text('Score:' + str(score), TC.yellow, TC.myfont, (820, 30))
+		score_label.Render()
+		score_label.blit()
+
+
 def menu():
         choice = 0
         gameon = False
@@ -416,10 +423,9 @@ while 1:
         if link.life>0:
                 screen.blit(background,[0,0])
 
-                if time < 10:
-                        moon = pygame.transform.scale(pygame.image.load("moon.png"), (200,100))
-                        moonrect = moon.get_rect()
-                        
+                if time_left < 10:
+                        TC.moon = pygame.transform.scale(TC.moon, (200, 200))
+
                 screen.blit(TC.moon, TC.moonrect)
 
                 TC.minimap(TC.minilinkrect, TC.minilink,
