@@ -11,6 +11,11 @@ clock = pygame.time.Clock()
 size = width, height = 1000,600
 screen = pygame.display.set_mode(size)
 
+image = "resources/images/"
+sound = "resources/sound/"
+
+
+
 #game numbers    ENGINE
 score = 0
 #life = 3
@@ -37,17 +42,17 @@ start = False
 tri_x = 500
 tri_y = 130
 
-triforce = pygame.transform.scale(pygame.image.load("triforce.png"), (50,50))
+triforce = pygame.transform.scale(pygame.image.load(image + "triforce.png"), (50,50))
 triforcerect = triforce.get_rect()
 
 triforcerect.center = (tri_x, tri_y)
 
 #mask config     ENGINE
-mask = pygame.transform.scale(pygame.image.load("mask.png"), (100, 100))
+mask = pygame.transform.scale(pygame.image.load(image + "mask.png"), (100, 100))
 maskrect = mask.get_rect()
 
 #ocarina config      ENGINE
-ocarina = pygame.transform.scale(pygame.image.load("ocarina.png"), (50, 50))
+ocarina = pygame.transform.scale(pygame.image.load(image +"ocarina.png"), (50, 50))
 ocarinarect = ocarina.get_rect()
 ocarina_x = 700
 ocarina_y = 300
@@ -91,10 +96,10 @@ class Link:
 	speed = 4	
 	scream = True
 	link_place = 'Clock Town'
-	link_win = pygame.transform.scale(pygame.image.load("link_win.gif"), (200,300))
-	link_up = pygame.transform.scale(pygame.image.load("link_up.gif"), (100, 100))
-	link_down = pygame.transform.scale(pygame.image.load("link_down.gif"), (100, 100))
-	link_left = pygame.transform.scale(pygame.image.load("link_up.gif"), (100, 100))
+	link_win = pygame.transform.scale(pygame.image.load(image + "link_win.gif"), (200,300))
+	link_up = pygame.transform.scale(pygame.image.load(image +"link_up.gif"), (100, 100))
+	link_down = pygame.transform.scale(pygame.image.load(image +"link_down.gif"), (100, 100))
+	link_left = pygame.transform.scale(pygame.image.load(image +"link_up.gif"), (100, 100))
 	
 	link = link_down
 	linkrect = link.get_rect()
@@ -132,16 +137,16 @@ class TriCollector:
    	myfont = pygame.font.SysFont("monospace", 30, bold=True)
   	myfont2 = pygame.font.SysFont("monospace", 80)	
 	
-	clock_town = pygame.image.load("clock_town.jpg").convert()
-	termina_field = pygame.image.load("termina_field.jpg").convert()
-  	snow_head = pygame.image.load("snow_head.jpg").convert()
-  	ikana_valley = pygame.image.load("ikana_valley.jpg").convert()
-  	southern_swamp = pygame.image.load("southern_swamp.jpg").convert()
- 	great_bay = pygame.image.load("great_bay.jpg").convert()
+	clock_town = pygame.image.load(image +"clock_town.jpg").convert()
+	termina_field = pygame.image.load(image +"termina_field.jpg").convert()
+  	snow_head = pygame.image.load(image +"snow_head.jpg").convert()
+  	ikana_valley = pygame.image.load(image +"ikana_valley.jpg").convert()
+  	southern_swamp = pygame.image.load(image +"southern_swamp.jpg").convert()
+ 	great_bay = pygame.image.load(image +"great_bay.jpg").convert()
  
  	place_font = pygame.font.SysFont("monospace", 50)
 	#moon config    INTERFACE
-  	moon = pygame.transform.scale(pygame.image.load("moon.png"), (100,100))
+  	moon = pygame.transform.scale(pygame.image.load(image +"moon.png"), (100,100))
    	moonrect = moon.get_rect()
    	moonrect.center = 600,50
   
@@ -149,21 +154,21 @@ class TriCollector:
   
 	 
 	#minilink config        INTERFACE
-	minilink = (pygame.transform.scale(pygame.image.load("link_down.gif"), (20, 20)))
+	minilink = (pygame.transform.scale(pygame.image.load(image +"link_down.gif"), (20, 20)))
 	minilinkrect = minilink.get_rect()
 	minilinkrect_x = 905
 	minilinkrect_y = 465
 	minilinkrect.center = minilinkrect_x,minilinkrect_y
 	
 	#miniocarina config     INTERFACE
-	miniocarina = pygame.transform.scale(pygame.image.load("ocarina.png"), (20, 20))
+	miniocarina = pygame.transform.scale(pygame.image.load(image +"ocarina.png"), (20, 20))
 	miniocarinarect = miniocarina.get_rect()
 	miniocarinarect_x = 905
 	miniocarinarect_y = 465
 	miniocarinarect.center = (miniocarinarect_x, miniocarinarect_y)
 	
 	#heart config    INTERFACE
-	heart = pygame.transform.scale(pygame.image.load("heart.png"), (30, 30))
+	heart = pygame.transform.scale(pygame.image.load(image +"heart.png"), (30, 30))
 	
 	def minimap(self, minilinkrect,minilink,
 	            minilinkrect_x, minilinkrect_y, oca_place,
@@ -255,7 +260,7 @@ class TriCollector:
 
 	def gameover(self):
 		screen.fill(TC.black)
-                moon = pygame.transform.scale(pygame.image.load("moon.png"), (1000,1000))
+                moon = pygame.transform.scale(pygame.image.load(image +"moon.png"), (1000,1000))
                 moonrect = moon.get_rect()
                 moonrect.center = width/2,height/2
                 screen.blit(moon,moonrect)
@@ -279,7 +284,7 @@ class TriCollector:
 def menu():
         choice = 0
         gameon = False
-        ping =  pygame.transform.scale(pygame.image.load("triforce.png"), (30,30))
+        ping =  pygame.transform.scale(pygame.image.load(image +"triforce.png"), (30,30))
         pingrect = ping.get_rect()
 
         pingrect.center = (170,150)
@@ -328,10 +333,10 @@ link = Link()
 
 
 # music = Media('zelda_main_theme.mp3', 'background') #TO HELL WITH THIS SONG
-song_of_times = Media('song_of_time.wav', 'effect')
-link_dead = Media('link_dead.wav', 'effect')
-link_hurt = Media('link_hurt.wav', 'effect')
-rupee_sound = Media('rupee_sound.wav', 'effect')
+song_of_times = Media(sound +'song_of_time.wav', 'effect')
+link_dead = Media(sound +'link_dead.wav', 'effect')
+link_hurt = Media(sound +'link_hurt.wav', 'effect')
+rupee_sound = Media(sound +'rupee_sound.wav', 'effect')
 
 
 
